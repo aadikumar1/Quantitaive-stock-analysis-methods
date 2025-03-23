@@ -1,0 +1,47 @@
+Backtesting strategy
+
+Using RSI for momentum trading 
+backtesting using SMA and rsi oversell undersell
+
+set features with respect to interets factors
+
+
+
+C++ features
+
+Cython, Pybind11, or ctypes.
+Import high speed modeols for SMA within python
+Use stop loss integration along with RSI to ptimise sell positions
+
+# Additional Features
+df['Open-Close'] = (df['Open'] - df['Close']) / df['Open']
+df['High-Low'] = (df['High'] - df['Low']) / df['Low']
+df['MA5'] = df['Close'].rolling(window=5).mean()
+df['MA10'] = df['Close'].rolling(window=10).mean()
+df['STD5'] = df['Close'].rolling(window=5).std()
+
+# Recalculate returns and lags
+df['Return'] = df['Close'].pct_change()
+df['Lag1'] = df['Return'].shift(1)
+df['Lag2'] = df['Return'].shift(2)
+df['Target'] = df['Return'].shift(-1)
+
+# Drop NA
+df.dropna(inplace=True)
+
+# Updated feature set
+features = ['Lag1', 'Lag2', 'Open-Close', 'High-Low', 'MA5', 'MA10', 'STD5']
+X = df[features]
+y = df['Target']
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=False, test_size=0.2)
+
+# Train model
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Predict and evaluate
+preds = model.predict(X_test)
+mse = mean_squared_error(y_test, preds)
+print(f"Mean Squared Error: {mse:.6f}") feature engineering in a random forest
